@@ -5,6 +5,9 @@ import {Model} from "mongoose";
 import * as bcrypt from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
 import { Response } from "express";
+import { loginUserDto } from "src/dto/login-user.dto";
+import { createBook } from "src/dto/create-book.dto";
+import { createUserDto } from "src/dto/create-user.dto";
 
 @Injectable({})
 export class AuthService {
@@ -17,23 +20,25 @@ export class AuthService {
     ){ }
      
 
-    async signup(user:User): Promise<User> {
+    async signup(user:createUserDto): Promise<User> {
 
         if(user.comfrimePassword !== user.password){
             throw new BadRequestException({error:'password and comfrimepassord are not same'});
 
         }
-
+        
         const existingUser = await this.userModel.findOne({email:user.email})
 
         if(existingUser){
             throw new BadRequestException({error:'existing user, Try with another email'});
 
         }
-
+   
         const saltRounds = 10;
         const _password = await bcrypt.hash(user.password , saltRounds);
         user.password = _password;
+
+        
         const res =  (await this.userModel.create(user)); 
         const result = res.save();
         return result;
@@ -42,7 +47,7 @@ export class AuthService {
 
     }
 
-    async signin(user:User , response:Response){
+    async signin(user:loginUserDto , response:Response){
             const res =  await this.userModel.findOne({email:user.email})
         
             if(! res){

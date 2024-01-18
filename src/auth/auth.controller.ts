@@ -2,6 +2,8 @@ import { Body, Controller, Get, Param, ParseFloatPipe, ParseIntPipe, Post , Req,
 import { AuthService } from "./auth.service";
 import { User } from "./user.schma";
 import { Response } from "express";
+import { createUserDto } from "src/dto/create-user.dto";
+import { loginUserDto } from "src/dto/login-user.dto";
 
 @Controller('auth')
 export class AuthController{
@@ -13,7 +15,7 @@ export class AuthController{
     @Post('signup')
     async signup(
         @Body()
-        user
+        user:createUserDto
     ):Promise<User>{
          const res = await  this.authService.signup(user)
          return res;
@@ -23,7 +25,7 @@ export class AuthController{
     @Post('signin')
     async signin(
         @Body()
-        user:User
+        user:loginUserDto
         ,
         @Res({passthrough:true})
         response:Response  
