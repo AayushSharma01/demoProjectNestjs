@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { BookService } from "./book.service";
 import { Book } from "./book.model";
 import { createBook } from "src/dto/create-book.dto";
 import {  updateBookDto } from "src/dto/update-book-dto";
+
+import {Query as ExpressQuery} from 'express-serve-static-core';
 
 @Controller('book')
 export class BookController{
@@ -18,8 +20,8 @@ export class BookController{
     }
 
     @Get('getbooks')
-    async getBooks():Promise<Book[]>{
-         return this.bookservice.getBooks()
+    async getBooks(@Query()query: ExpressQuery):Promise<Book[]>{
+         return this.bookservice.getBooks(query)
     }
 
     @Get(':id')

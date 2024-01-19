@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseFloatPipe, ParseIntPipe, Post , Req, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, ParseFloatPipe, ParseIntPipe, Post , Req, Res } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { User } from "./user.schma";
 import { Response } from "express";
@@ -23,6 +23,7 @@ export class AuthController{
     }
 
     @Post('signin')
+    @HttpCode(204)
     async signin(
         @Body()
         user:loginUserDto
